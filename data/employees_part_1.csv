@@ -1,0 +1,11 @@
+employee_id,first_name,last_name,email,department,salary,hire_date,updated_at
+1,Ava,Johnson,ava.johnson1@example.com,Finance,56250,2022-02-01,2026-10-10 12:00:00 UTC
+2,Liam,Davis,liam.davis2@example.com,HR,57500,2022-03-04,2026-10-10 12:01:00 UTC
+3,Noah,Martin,noah.martin3@example.com,Sales,58750,2022-04-04,2026-10-10 12:02:00 UTC
+4,Mia,Garcia,mia.garcia4@example.com,Operations,60000,2022-05-05,2026-10-10 12:03:00 UTC
+5,Emma,Brown,emma.brown5@example.com,Engineering,61250,2022-06-05,2026-10-10 12:04:00 UTC
+6,Ethan,Clark,ethan.clark6@example.com,Finance,62500,2022-07-06,2026-10-10 12:05:00 UTC
+7,Olivia,Smith,olivia.smith7@example.com,HR,63750,2022-08-06,2026-10-10 12:06:00 UTC
+8,Aria,Lee,aria.lee8@example.com,Sales,65000,2022-09-06,2026-10-10 12:07:00 UTC
+9,Lucas,Wilson,lucas.wilson9@example.com,Operations,66250,2022-10-07,2026-10-10 12:08:00 UTC
+10,Sophia,Patel,sophia.patel10@example.com,Engineering,67500,2022-11-07,2026-10-10 12:09:00 UTC
