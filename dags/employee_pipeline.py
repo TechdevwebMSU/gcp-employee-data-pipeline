@@ -10,25 +10,28 @@ PROJECT_ID = os.getenv(
     "GCP_PROJECT_ID",
     "project-67cb1491-36cb-437f-b95"
 )
+
 BUCKET = os.getenv(
     "EMPLOYEE_BUCKET",
     "employee-pipeline-neel-2026"
 )
+
 LOCATION = "us-central1"
 
 with DAG(
     dag_id="employee_gcs_to_bigquery",
     start_date=datetime(2026, 10, 15),
-    schedule="* * * * *",
+    schedule=None,
     catchup=False,
     max_active_runs=1,
     default_args={
         "retries": 1,
-        "retry_delay": timedelta(minutes=2)
+        "retry_delay": timedelta(minutes=2),
     },
     tags=["employee", "gcs", "bigquery"],
 ) as dag:
 
+    # Task 1: Load all CSV files from GCS to BigQuery raw
     load_raw = GCSToBigQueryOperator(
         task_id="load_gcs_to_raw",
         bucket=BUCKET,
@@ -53,6 +56,7 @@ with DAG(
         location=LOCATION,
     )
 
+    # Task 2: Clean and deduplicate employee records
     transform = BigQueryInsertJobOperator(
         task_id="raw_to_curated",
         configuration={
@@ -86,6 +90,7 @@ with DAG(
         location=LOCATION,
     )
 
+    # Task 3: Validate curated employee data
     validate = BigQueryInsertJobOperator(
         task_id="validate_curated_data",
         configuration={
@@ -100,6 +105,11 @@ with DAG(
                         SELECT COUNT(*) = COUNT(DISTINCT employee_id)
                         FROM `{PROJECT_ID}.employee_curated.employees`
                     ) AS 'Duplicate employee IDs detected';
+
+                    ASSERT (
+                        SELECT COUNT(*) = 30
+                        FROM `{PROJECT_ID}.employee_curated.employees`
+                    ) AS 'Expected 30 employee records';
                 """,
                 "useLegacySql": False,
             }
@@ -107,4 +117,5 @@ with DAG(
         location=LOCATION,
     )
 
+    # Task dependencies
     load_raw >> transform >> validate
