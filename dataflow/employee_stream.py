@@ -46,6 +46,7 @@ def run():
         temp_location="gs://employee-pipeline-neel-2026/dataflow/temp",
         staging_location="gs://employee-pipeline-neel-2026/dataflow/staging",
         job_name="employee-stream-generator",
+        service_account_email="dataflow-practice-sa@project-67cb1491-36cb-437f-b95.iam.gserviceaccount.com",
         save_main_session=True,
     )
 
