@@ -96,20 +96,33 @@ with DAG(
         configuration={
             "query": {
                 "query": f"""
+                    -- Check 1: Curated table must not be empty
                     ASSERT (
                         SELECT COUNT(*) > 0
                         FROM `{PROJECT_ID}.employee_curated.employees`
                     ) AS 'Curated employee table is empty';
 
+                    -- Check 2: Employee IDs must be unique
                     ASSERT (
                         SELECT COUNT(*) = COUNT(DISTINCT employee_id)
                         FROM `{PROJECT_ID}.employee_curated.employees`
                     ) AS 'Duplicate employee IDs detected';
 
+                    -- Check 3: Employee IDs must not be NULL
                     ASSERT (
-                        SELECT COUNT(*) = 30
+                        SELECT COUNTIF(employee_id IS NULL) = 0
                         FROM `{PROJECT_ID}.employee_curated.employees`
-                    ) AS 'Expected 30 employee records';
+                    ) AS 'NULL employee IDs detected';
+
+                    -- Check 4: Required fields must not be NULL
+                    ASSERT (
+                        SELECT COUNTIF(
+                            first_name IS NULL
+                            OR email IS NULL
+                            OR department IS NULL
+                        ) = 0
+                        FROM `{PROJECT_ID}.employee_curated.employees`
+                    ) AS 'Missing required employee information';
                 """,
                 "useLegacySql": False,
             }
